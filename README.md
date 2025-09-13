@@ -14,46 +14,47 @@ FERRAMENTAS UTILIZADAS:
 🔵 Identificar e tratar valores nulos  
    📈  
 **Identificando nulos na tabela:**  
-Competition: 50 NULOS, na coluna: IN_SHAZAM_Charts
-Tec_info: 95 nulos na coluna: Key
-Spotify: não há nulos
+Competition: 50 NULOS, na coluna: IN_SHAZAM_Charts  
+Tec_info: 95 nulos na coluna: Key  
+Spotify: não há nulos  
   
 **Fórmula SQL usada para encontrar onde havia nulos:**
->  
->SELECT  
-> *  
->FROM  
->  `proj002-lab-mariucha-ponte.Projeto02.copetition`  
->WHERE  
->  track_id IS  NULL  
->  OR in_apple_charts IS  NULL  
->  OR in_apple_playlists IS  NULL  
->  OR in_deezer_charts IS  NULL  
->  OR in_deezer_playlists IS  NULL  
->  OR in_shazam_charts IS  NULL  
-
+```   
+SELECT  
+ *  
+FROM  
+  `proj002-lab-mariucha-ponte.Projeto02.copetition`  
+WHERE  
+  track_id IS  NULL  
+  OR in_apple_charts IS  NULL  
+  OR in_apple_playlists IS  NULL  
+  OR in_deezer_charts IS  NULL  
+  OR in_deezer_playlists IS  NULL  
+  OR in_shazam_charts IS  NULL  
+ ```  
 **Fórmula SQL usada para limpar os dados nulos, trazendo apenas as linhas cuja coluna x não tinha nulos:**  
->SELECT  
-> *  
->FROM  
->  `proj002-lab-mariucha-ponte.Projeto02.copetition`  
->WHERE  
->  in_shazam_charts IS not NULL"  
+``` SELECT  
+ *  
+FROM  
+  `proj002-lab-mariucha-ponte.Projeto02.copetition`  
+WHERE  
+  in_shazam_charts IS not NULL
+ ``` 
   
 🔵 Identificar e tratar valores duplicados	  
 **Fórmula sql usada para identificar duplicados:**
-
->SELECT
->  track_name,
->  artist_s_name,
->  COUNT(*) as quant
->FROM
->  `proj002-lab-mariucha-ponte.Projeto02.spotify`
->GROUP BY
->  track_name,
->  artist_s_name
->having quant >1
-  
+``` 
+SELECT
+  track_name,
+  artist_s_name,
+  COUNT(*) as quant
+FROM
+  `proj002-lab-mariucha-ponte.Projeto02.spotify`
+GROUP BY
+  track_name,
+  artist_s_name
+having quant >1
+ ```  
   
 **Identificando duplicados na tabela:**  
 spotify: 4 duplicados  
@@ -61,139 +62,141 @@ tec_info: não há duplicados
 competition: não há duplicados  
 
 **para identificar todas as colunas das linhas onde há duplicados, o codigo sql foi:**  
->SELECT 
->* 
->FROM `proj002-lab-mariucha-ponte.Projeto02.spotify`
->WHERE 
->track_name = ""SNAP""
->or track_name = ""About Damn Time""
->or track_name = ""Take My Breath""
->or track_name = ""SPIT IN MY FACE!""  
-  
+``` SELECT 
+* 
+FROM `proj002-lab-mariucha-ponte.Projeto02.spotify`
+WHERE 
+track_name = ""SNAP""
+or track_name = ""About Damn Time""
+or track_name = ""Take My Breath""
+or track_name = ""SPIT IN MY FACE!""  
+ ```    
 *apenas na faixa  About damn time, de Lizzo, há mes e dia de lançamento diferente. Os demais nao identifiquei motivo de haver duplicados.  
 *verificar quando possível o join dos tres conjuntos de dados  
   
 🔵 Identificar e gerenciar dados fora do escopo de análise	  
 **Código sql para excluir uma coluna:**  
->SELECT  
->* except(key,mode)  
-> FROM `proj002-lab-mariucha-ponte.Projeto02.tec_info`  
-  
+``` SELECT  
+* except(key,mode)  
+ FROM `proj002-lab-mariucha-ponte.Projeto02.tec_info` ```
+ 
 🔵 Identificar e tratar dados discrepantes em variáveis ​​categóricas  
 **Código sql para substituir cacrateres espciais:**  
->SELECT  
->  artist_s_name,  
->  REGEXP_REPLACE(artist_s_name, r'[^a-zA-Z0-9 ]', ' ')  
->  as sem_carcar_especial  
->FROM  
->  `proj002-lab-mariucha-ponte.Projeto02.spotify`  
->  
->#codigo q significa caracteres especiias: r'[^a-zA-Z0-9 ]'  
-
+``` SELECT  
+ artist_s_name,  
+  REGEXP_REPLACE(artist_s_name, r'[^a-zA-Z0-9 ]', ' ')  
+  as sem_carcar_especial  
+FROM  
+  `proj002-lab-mariucha-ponte.Projeto02.spotify`  
+  
+#codigo q significa caracteres especiias: r'[^a-zA-Z0-9 ]'  
+ ```  
 🔵 Identificar e tratar dados discrepantes em variáveis ​​numéricas  
 *planiilha spotify tem um dado numerico sicrepante (pois esta como texto, tornando toda a coluna stribng) na linha 47 da coluna streams  
   
 🔵 Verificar e alterar os tipos de dados	    
->SELECT  
-> safe_cast (streams as int64) as streams_limpo  
->FROM  
->  `proj002-lab-mariucha-ponte.Projeto02.spotify`  
-  
+``` SELECT  
+ safe_cast (streams as int64) as streams_limpo  
+FROM  
+  `proj002-lab-mariucha-ponte.Projeto02.spotify`  
+ ```    
 **Porém, para tentar gerar o min, max e avg junto com o safe cast, usei essa:**  
   
->SELECT  
->   
->  MIN(streams_limpo) AS minimo_streams_spotify,  
->  MAX(streams_limpo) AS maximo_streams_spotify,  
->  round(avg(streams_limpo), 2) as media_streams_spotify  
->  
->FROM   
->(    
->  SELECT   
->    SAFE_CAST(streams AS int64) as streams_limpo  
->       FROM   
->       `proj002-lab-mariucha-ponte.Projeto02.spotify`  
->)  
+``` SELECT  
+   
+  MIN(streams_limpo) AS minimo_streams_spotify,  
+  MAX(streams_limpo) AS maximo_streams_spotify,  
+  round(avg(streams_limpo), 2) as media_streams_spotify  
   
+FROM   
+(    
+  SELECT   
+    SAFE_CAST(streams AS int64) as streams_limpo  
+       FROM   
+       `proj002-lab-mariucha-ponte.Projeto02.spotify`  
+)  
+ ```  
+     
 🔵 Unir (join) as tabelas de dados	  
 **Juntei 4 views numa query só, e funcionou, cirando inclusive uma nova variavel, de soma de duas outras assim:**  
-   
->SELECT   
->    
->a.track_id ,   
->  
->a.track_name ,  
->  
->a.nome_artista_limpo,  
->  
->a.artist_count ,  
->  
->a.DATA_DE_LANCAMENTO ,  
->  
->a.in_spotify_playlists ,  
->  
->d.in_apple_playlists ,  
->  
->d.in_deezer_playlists ,  
->  
->c.soma_playlists_conc + in_spotify_playlists as soma_playlists ,   
->  
->b.streams_limpo ,  
->  
->FROM `proj002-lab-mariucha-ponte.Projeto02.spotify_limpo_sem_streams_com_obs_sobre_duplicados`  
-> 
->as a  
->  
->join  
->  
->`proj002-lab-mariucha-ponte.Projeto02.spotify_streams_limpo`  
->  
->as b  
-> 
->on  
->a.track_id = b.track_id  
->  
->join  
->  
->`proj002-lab-mariucha-ponte.Projeto02.playlists_concorrentes_somadas`   
->  
->as c   
->  
->on   
->  
->a.track_id = c.track_id   
->  
->join   
->  
->`proj002-lab-mariucha-ponte.Projeto02.competition`   
->  
->as d   
->  
->on   
->  
->a.track_id = d.track_id  
+ ```   
+SELECT   
+    
+a.track_id ,   
+  
+a.track_name ,  
+  
+a.nome_artista_limpo,  
+  
+a.artist_count ,  
+  
+a.DATA_DE_LANCAMENTO ,  
+  
+a.in_spotify_playlists ,  
+  
+d.in_apple_playlists ,  
+  
+d.in_deezer_playlists ,  
+  
+c.soma_playlists_conc + in_spotify_playlists as soma_playlists ,   
+  
+b.streams_limpo ,  
+  
+FROM `proj002-lab-mariucha-ponte.Projeto02.spotify_limpo_sem_streams_com_obs_sobre_duplicados`  
+ 
+as a  
+  
+join  
+  
+`proj002-lab-mariucha-ponte.Projeto02.spotify_streams_limpo`  
+  
+as b  
+ 
+on  
+a.track_id = b.track_id  
+  
+join  
+  
+`proj002-lab-mariucha-ponte.Projeto02.playlists_concorrentes_somadas`   
+  
+as c   
+  
+on   
+  
+a.track_id = c.track_id   
+  
+join   
+  
+`proj002-lab-mariucha-ponte.Projeto02.competition`   
+  
+as d   
+  
+on   
+  
+a.track_id = d.track_id  
 
-#adicionar as caracteristicas das musicas, dnceability, bpm, etc 
+#adicionar as caracteristicas das musicas, dnceability, bpm, etc  
+ ```
 
-"
 🔵 Criar novas variáveis ​​    
 **exemplo1:**
-  
->SELECT   
->  track_id,  
->  in_apple_playlists + in_deezer_playlists as playlists_concorrentes  
->FROM `proj002-lab-mariucha-ponte.Projeto02.copetition`   
-  
+``` 
+SELECT   
+  track_id,  
+  in_apple_playlists + in_deezer_playlists as playlists_concorrentes  
+FROM `proj002-lab-mariucha-ponte.Projeto02.copetition`   
+ ```    
 **exemplo2:**  
->SELECT  
->  DATE(CONCAT(released_year, ""-"", released_month, ""-"", released_day)) AS DATA_DE_LANCAMENTO,  
->  SUM(in_spotify_charts) AS SOMA_CHARTS_SPOTFY,  
->  SUM(in_spotify_playlists) AS SOMA_PLAYLISTS_SPOTFY  
->  
->  FROM  
->    `proj002-lab-mariucha-ponte.Projeto02.spotify` 
->    GROUP BY DATA_DE_LANCAMENTO"  
-      
+``` SELECT  
+  DATE(CONCAT(released_year, ""-"", released_month, ""-"", released_day)) AS DATA_DE_LANCAMENTO,  
+  SUM(in_spotify_charts) AS SOMA_CHARTS_SPOTFY,  
+  SUM(in_spotify_playlists) AS SOMA_PLAYLISTS_SPOTFY  
+  
+  FROM  
+    `proj002-lab-mariucha-ponte.Projeto02.spotify` 
+    GROUP BY DATA_DE_LANCAMENTO"  
+ ```
+        
 🔵 Construir tabelas de dados auxiliares	  
 ``` with teste   
   as  
@@ -217,7 +220,8 @@ FROM `proj002-lab-mariucha-ponte.Projeto02.spotify_limpo_sem_streams_com_obs_sob
   
 right join  teste  
 using (nome_artista_limpo)  
-#`USING` ao invés de `ON x=y`  ```
+#`USING` ao invés de `ON x=y`
+  ```
   
 🟣 Agrupar dados de acordo com variáveis ​​categóricas	   
 Muito tranquilo, parece mesmo com tabelas dinamicas. é o icone de matriz, parece uma tabelinha, mas algumas celulas direitas e inferiores sao azuis  
@@ -303,7 +307,8 @@ FROM
 LEFT JOIN  
   q  
 ON  
-  a.streams_limpo=q.streams_limpo  ```
+  a.streams_limpo=q.streams_limpo
+  ```  
     
 **quartis da categoria BPM**  
 ``` WITH  
@@ -333,8 +338,8 @@ FROM
   `proj002-lab-mariucha-ponte.Projeto02.tabela_completa_com_quartis` AS a  
  JOIN  
   q  
-using (track_id)
-```
+using (track_id)  
+```  
 
 🟣 Calcular correlação entre variáveis ​​	  
 **correlacao positiva entre quantidade de streams e quantidade de playlists onde a musica está**  
@@ -404,12 +409,13 @@ round(
   as charts_spotifyXapple,  
   
 FROM  
-`proj002-lab-mariucha-ponte.Projeto02.tabela_completa_com_quartis`  ```
+`proj002-lab-mariucha-ponte.Projeto02.tabela_completa_com_quartis`
+ ```
   
   
 **correlacao hipotese numero de musicas x numero de streams:**
 
-  ```with base
+  ``` with base
   as
   (
     SELECT
@@ -440,13 +446,13 @@ FROM
          ,2)
     as correspondencia,
   
-    FROM base 
-```  
+    FROM base   
+ ```  
   
 🔴 Aplicar segmentação	  
-✔			fiz a segmentacao por quartis dos dtrems e comparei nao apena spor numeros ma stb por graficos barra com os numeros de cada uma das technical informations, e nao identifiquei relcao. concluo que nao tem correlcao
+			fiz a segmentacao por quartis dos dtrems e comparei nao apena spor numeros ma stb por graficos barra com os numeros de cada uma das technical informations, e nao identifiquei relcao. concluo que nao tem correlcao
 🔴 Validar hipótese	  
-✔			"eu ja vinha validando as hipoteses e fiz uma aba neste arquivo com a conclusao sobre cada uma. porem ainda nao entendi bem como usar o isrograma, pois os 7 que fiz me deixam concluir que , novamnte, nao tem relacao.. vou ver o video novamente.
+			"eu ja vinha validando as hipoteses e fiz uma aba neste arquivo com a conclusao sobre cada uma. porem ainda nao entendi bem como usar o isrograma, pois os 7 que fiz me deixam concluir que , novamnte, nao tem relacao.. vou ver o video novamente.
 
 nao consegui absorver as coisas extra de estatistica do oraculo
 
@@ -454,19 +460,20 @@ link interessante: https://voitto.com.br/blog/artigo/teste-de-hipotese
 
 coemcei a perguntar aochatgpt para entender  abase de estatistica"
 🔴 Regressão linear	  
-✔			nao encontrei esse conteudo na plataforma
-🟠 Representar os dados por meio de tabela resumo ou scorecards	  
-✔			muito teste e repetição e gráficos dieferentes. vi videos n youtube om outras solucoes também
-🟠 Representar os dados através de gráficos simples	  
-✔			esse foi mais fácil
-🟠 Representar os dados por meio de gráficos ou recursos visuais avançados  	
-✔			não foi mais dificil, como o nome sugeria
-🟠 Representar os dados por meio de gráficos ou recursos visuais avançados		  
-✔		marco adicional, nao cheguei nele
-🟠 Aplicar opções de filtros para gerenciamento e interação	  
-✔			"foi faciil tabém,. os videos ajudaram. 
-E o chat gpt tambem me ajudou (com um filtro com o qual eu estava tendo dificuldade) a criar uma selecao por streams, com uma DAX e uma criacao de tabela adiciona:
-
+			nao encontrei esse conteudo na plataforma  
+🟠 Representar os dados por meio de tabela resumo ou scorecards	    
+			muito teste e repetição e gráficos dieferentes. vi videos n youtube om outras solucoes também  
+🟠 Representar os dados através de gráficos simples	    
+			esse foi mais fácil  
+🟠 Representar os dados por meio de gráficos ou recursos visuais avançados  	  
+			não foi mais dificil, como o nome sugeria  
+🟠 Representar os dados por meio de gráficos ou recursos visuais avançados		    
+		marco adicional, nao cheguei nele  
+🟠 Aplicar opções de filtros para gerenciamento e interação	    
+			"foi faciil tabém,. os videos ajudaram.   
+E o chat gpt tambem me ajudou (com um filtro com o qual eu estava tendo dificuldade) a criar uma selecao por streams, com uma DAX e uma criacao de tabela adiciona:  
+  
+``` 
 Passo a passo (usando DAX)
 
 Criar uma tabela auxiliar de plataformas (para o slicer):
@@ -474,8 +481,9 @@ Criar uma tabela auxiliar de plataformas (para o slicer):
 No menu superior → Modelagem → Nova tabela.
 
 Digite:
+ ```
 
-Plataformas = 
+``` Plataformas = 
 DATATABLE (
     ""Plataforma"", STRING,
     {
@@ -484,17 +492,18 @@ DATATABLE (
         {""Apple""}
     }
 )
+ ```
 
-
-Agora você tem uma pequena tabela só com os 3 nomes das plataformas.
+```Agora você tem uma pequena tabela só com os 3 nomes das plataformas.
 
 Criar uma medida que muda conforme a seleção:
 
 Vá em Modelagem → Nova medida.
 
 Digite algo assim (ajuste os nomes das colunas conforme estão na sua base):
-
-Qtd_Playlists_Selecionada = 
+ ```
+  
+``` Qtd_Playlists_Selecionada = 
 SWITCH(
     SELECTEDVALUE(Plataformas[Plataforma]),
     ""Spotify"", SUM(Tabela[in_spotify_playlists]),
@@ -502,9 +511,9 @@ SWITCH(
     ""Apple"", SUM(Tabela[in_apple_playlists]),
     BLANK()
 )
-
-
-O que acontece aqui:
+ ```
+  
+``` O que acontece aqui:
 
 SELECTEDVALUE pega a escolha do usuário no slicer (Spotify, Deezer ou Apple).
 
@@ -518,18 +527,27 @@ No gráfico de barras:
 
 Eixo X → Track_id (ou nome da música).
 
-Valores → a medida Qtd_Playlists_Selecionada."
-🟢 Selecionar gráficos e informações relevantes	✔			
-"me euni com inha dupla e discutimos quais graficos serviriam para cada caso e como fariamos funcionar. fiz u mrascunho no papel tambe, separando por cada hipotese,sendo que a hipotese 1 e a 5 foram juntas
+Valores → a medida Qtd_Playlists_Selecionada.
+ ```
+  
+🟢 Selecionar gráficos e informações relevantes	  			  
+"me reuni com minha dupla e discutimos quais graficos serviriam para cada caso e como fariamos funcionar. fiz u mrascunho no papel tambe, separando por cada hipotese,sendo que a hipotese 1 e a 5 foram juntas  
+  
+contei com ajuda do coach vitor para inseriri um filtro visual que nao estava conseguindo. o principal problema é que eu estava puxando dados de tabelas diferenes e para o que eu queria, pra hipotese x, nao estava funcionado fáci lomo foi pra hipotese y.  os codigos usados para solucionar  foram:"  
+  
+🟢 Selecionar gráficos e informações relevantes		  
+		marco2. voltarei a ele ao fim do periodo de entrega do proj 3  
+  
+🟢 Criar uma apresentação     
+			foi tranquilo. com a dupla definimos que a apresentaao seria simples, hipotese a hipotese, que eu faria o visual, ate pq meus graficos estavam organizados em dashboards ja, e por conta d eminha formacao em desing gráfico. peguei um modelo do canva apresentacoes para otimizar o tempo , fiz download como pptx e importei pro google apesentacoes. nele ajustei e inseri prints dos graficos do owerBI. Nao dediqui tempo a puxar os gráficos vinculados, então trabalhei ocm print mesmo, ate para dar tempo de fazer o projeto3 a tempo antes do fim do bootcamp.  
+  
+🟢 Criar uma apresentação		  
+		marco2. voltarei a ele ao fim do periodo de entrega do proj 3  
+  
+🟢 Apresentar resultados com conclusões e recomendações	  
 
-contei com ajuda do coach vitor para inseriri um filtro visual que nao estava conseguindo. o principal problema é que eu estava puxando dados de tabelas diferenes e para o que eu queria, pra hipotese x, nao estava funcionado fáci lomo foi pra hipotese y.  os codigos usados para solucionar  foram:"
-🟢 Selecionar gráficos e informações relevantes		
-✔		marco2. voltarei a ele ao fim do periodo de entrega do proj 3
-🟢 Criar uma apresentação   
-✔			foi tranquilo. com a dupla definimos que a apresentaao seria simples, hipotese a hipotese, que eu faria o visual, ate pq meus graficos estavam organizados em dashboards ja, e por conta d eminha formacao em desing gráfico. peguei um modelo do canva apresentacoes para otimizar o tempo , fiz download como pptx e importei pro google apesentacoes. nele ajustei e inseri prints dos graficos do owerBI. Nao dediqui tempo a puxar os gráficos vinculados, então trabalhei ocm print mesmo, ate para dar tempo de fazer o projeto3 a tempo antes do fim do bootcamp.
-🟢 Criar uma apresentação		
-✔		marco2. voltarei a ele ao fim do periodo de entrega do proj 3
-🟢 Apresentar resultados com conclusões e recomendações	
-✔			onversei com a dupla, confirmamos que vamos usar a apsentacao com oficou depois de ajutarmos algumas coisas que discutimos. proximo passo: gravar o video e entegar as documentacoes.
-🟢 Apresentar resultados com conclusões e recomendações		✔		marco2. voltarei a ele ao fim do periodo de entrega do proj 3
+			onversei com a dupla, confirmamos que vamos usar a apsentacao com oficou depois de ajutarmos algumas coisas que discutimos. proximo passo: gravar o video e entegar as documentacoes.  
+  
+🟢 Apresentar resultados com conclusões e recomendações		 
+		marco2. voltarei a ele ao fim do periodo de entrega do proj 3
 
