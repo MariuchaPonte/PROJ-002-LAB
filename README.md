@@ -8,42 +8,38 @@ FERRAMENTAS UTILIZADAS:
 📈 BigQuery  
 📊 PowerBI  
   
-#Documentação da execução no 📈 BigQuery  
+#Etapas 
   
-  
-#Documentação da execução no 📊 PowerBI  
-
-
-🔵 Conectar/importar dados para as ferramentas    
-🔵 Identificar e tratar valores nulos	  
+🔵 Conectar/importar dados para as ferramentas  
+🔵 Identificar e tratar valores nulos  
    📈  
-" Identificado na tabela  
-Competition: 50 NULOS, na coluna IN_SHAZAM_Charts
-Tec_info: 95 nulos na coluna key
-Spotify: não tem nulos
+**Identificando nulos na tabela:**  
+Competition: 50 NULOS, na coluna: IN_SHAZAM_Charts
+Tec_info: 95 nulos na coluna: Key
+Spotify: não há nulos
+  
+**Fórmula SQL usada para encontrar onde havia nulos:**
+>  
+>SELECT  
+> *  
+>FROM  
+>  `proj002-lab-mariucha-ponte.Projeto02.copetition`  
+>WHERE  
+>  track_id IS  NULL  
+>  OR in_apple_charts IS  NULL  
+>  OR in_apple_playlists IS  NULL  
+>  OR in_deezer_charts IS  NULL  
+>  OR in_deezer_playlists IS  NULL  
+>  OR in_shazam_charts IS  NULL  
 
-Fórmula SQL usada para encontrar onde havia nulos:
-'''
-SELECT
- *
-FROM
-  `proj002-lab-mariucha-ponte.Projeto02.copetition`
-WHERE
-  track_id IS  NULL
-  OR in_apple_charts IS  NULL
-  OR in_apple_playlists IS  NULL
-  OR in_deezer_charts IS  NULL
-  OR in_deezer_playlists IS  NULL
-  OR in_shazam_charts IS  NULL
-
-formula sql usada para limpar os dados nulos, trazendo apenas as linhas cuja coluna x nao tinha nulos:
-SELECT
- *
-FROM
-  `proj002-lab-mariucha-ponte.Projeto02.copetition`
-WHERE
-  in_shazam_charts IS not NULL"  
-  '''
+**Fórmula SQL usada para limpar os dados nulos, trazendo apenas as linhas cuja coluna x não tinha nulos:**  
+>SELECT  
+> *  
+>FROM  
+>  `proj002-lab-mariucha-ponte.Projeto02.copetition`  
+>WHERE  
+>  in_shazam_charts IS not NULL"  
+  
 🔵 Identificar e tratar valores duplicados	  
 ✔			"formula sql usadapara identificar duplicados:
 
