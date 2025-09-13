@@ -195,29 +195,29 @@ competition: não há duplicados
 >    GROUP BY DATA_DE_LANCAMENTO"  
       
 🔵 Construir tabelas de dados auxiliares	  
->with teste   
->  as  
->  (  
->  select   
->  nome_artista_limpo,  
->  count(*) as nro_de_songs_do_artist  
->  
->  from `proj002-lab-mariucha-ponte.Projeto02.spotify_limpo_sem_streams_com_obs_sobre_duplicados`   
->  
->  group by nome_artista_limpo  
->  )  
->#tabela temporaria  
->  
->SELECT    
->* except   
-> (  
->nome_alterado  
-> )  
->FROM `proj002-lab-mariucha-ponte.Projeto02.spotify_limpo_sem_streams_com_obs_sobre_duplicados` as o  
->  
->right join  teste  
->using (nome_artista_limpo)  
->#`USING` ao invés de `ON x=y`  
+``` with teste   
+  as  
+  (  
+  select   
+  nome_artista_limpo,  
+  count(*) as nro_de_songs_do_artist  
+  
+  from `proj002-lab-mariucha-ponte.Projeto02.spotify_limpo_sem_streams_com_obs_sobre_duplicados`   
+  
+  group by nome_artista_limpo  
+  )  
+#tabela temporaria  
+  
+SELECT    
+* except   
+ (  
+nome_alterado  
+ )  
+FROM `proj002-lab-mariucha-ponte.Projeto02.spotify_limpo_sem_streams_com_obs_sobre_duplicados` as o  
+  
+right join  teste  
+using (nome_artista_limpo)  
+#`USING` ao invés de `ON x=y`  ```
   
 🟣 Agrupar dados de acordo com variáveis ​​categóricas	   
 Muito tranquilo, parece mesmo com tabelas dinamicas. é o icone de matriz, parece uma tabelinha, mas algumas celulas direitas e inferiores sao azuis  
@@ -245,207 +245,204 @@ desvio padrao alto significa que os daods em geral estao masi distantes da media
 Fiz grafico de linha ao longo do tempo, vi como inserir filtro de "segmentacao de dados" (um tipo de grafico) flutuante na tela no dashboard  
   
 🟣 Calcular quartis, decis ou percentis	    
->with q  
->as  
->(select   
->streams_limpo,  
->ntile(4) over (order by streams_limpo) as quartis_streams  
->from `proj002-lab-mariucha-ponte.Projeto02.hipoteses_completona_limpa`   
->)  
->  
->SELECT   
->a.*,  
->q.quartis_streams  
-> FROM `proj002-lab-mariucha-ponte.Projeto02.hipoteses_completona_limpa` as a  
->   
-> left join q  
->  
-> on a.streams_limpo=q.streams_limpo  
->  
->#categorizado em alto e baixo  
->WITH  
->  q AS (  
->  SELECT  
->    streams_limpo,  
->    NTILE(4) OVER (ORDER BY streams_limpo) AS quartis_streams  
->  FROM  
->    `proj002-lab-mariucha-ponte.Projeto02.hipoteses_completona_limpa` )  
->  
->SELECT  
->  a.*,  
->  q.quartis_streams,  
->IF  
->  (q.quartis_streams = 4, ""alto"", ""baixo"") as quartis_streams  
->  
->FROM  
->  `proj002-lab-mariucha-ponte.Projeto02.hipoteses_completona_limpa` AS a  
->LEFT JOIN  
->  q  
->ON  
->  a.streams_limpo=q.streams_limpo  
->  
->WITH  
->  q AS (  
->  SELECT  
->    streams_limpo,  
->    NTILE(4) OVER (ORDER BY streams_limpo) AS quartis_streams  
->  FROM  
->    `proj002-lab-mariucha-ponte.Projeto02.hipoteses_completona_limpa` )  
->  
->SELECT  
->  a.*,  
->  q.quartis_streams,  
->IF  
->  (q.quartis_streams = 4, ""alto"", ""baixo"") as quartis_streams  
->  
->FROM  
->  `proj002-lab-mariucha-ponte.Projeto02.hipoteses_completona_limpa` AS a  
->LEFT JOIN  
->  q  
->ON  
->  a.streams_limpo=q.streams_limpo  
->    
-**quartis da categoria BPM**  
->WITH  
->  q AS (  
->  SELECT  
->    track_id,  
->    bpm,  
->    NTILE(4) OVER (ORDER BY bpm) AS quartis_bpm  
->  FROM  
->    `proj002-lab-mariucha-ponte.Projeto02.tabela_completa_com_quartis`   
->    )  
->  
->SELECT  
->  a.*,  
->  q.quartis_bpm,  
->  #abaixo, estou colocando as categorias (nomes) em cada quartil  
->case  
->when q.quartis_bpm = 4 then ""alto""  
->when q.quartis_bpm = 3 then ""medio""  
->when q.quartis_bpm = 2 then ""baixo""  
->when q.quartis_bpm = 1 then ""irrisorio""  
->end
->  
->as quartil_bpm_nome  
->  
->FROM  
->  `proj002-lab-mariucha-ponte.Projeto02.tabela_completa_com_quartis` AS a  
-> JOIN  
->  q  
->using (track_id)  
+``` with q  
+as  
+(select   
+streams_limpo,  
+ntile(4) over (order by streams_limpo) as quartis_streams  
+from `proj002-lab-mariucha-ponte.Projeto02.hipoteses_completona_limpa`   
+)  
   
+SELECT   
+a.*,  
+q.quartis_streams  
+ FROM `proj002-lab-mariucha-ponte.Projeto02.hipoteses_completona_limpa` as a  
+   
+ left join q  
+  
+ on a.streams_limpo=q.streams_limpo  
+  
+#categorizado em alto e baixo  
+WITH  
+  q AS (  
+  SELECT  
+    streams_limpo,  
+    NTILE(4) OVER (ORDER BY streams_limpo) AS quartis_streams  
+  FROM  
+    `proj002-lab-mariucha-ponte.Projeto02.hipoteses_completona_limpa` )  
+  
+SELECT  
+  a.*,  
+  q.quartis_streams,  
+IF  
+  (q.quartis_streams = 4, ""alto"", ""baixo"") as quartis_streams  
+  
+FROM  
+  `proj002-lab-mariucha-ponte.Projeto02.hipoteses_completona_limpa` AS a  
+LEFT JOIN  
+  q  
+ON  
+  a.streams_limpo=q.streams_limpo  
+  
+WITH  
+  q AS (  
+  SELECT  
+    streams_limpo,  
+    NTILE(4) OVER (ORDER BY streams_limpo) AS quartis_streams  
+  FROM  
+    `proj002-lab-mariucha-ponte.Projeto02.hipoteses_completona_limpa` )  
+  
+SELECT  
+  a.*,  
+  q.quartis_streams,  
+IF  
+  (q.quartis_streams = 4, ""alto"", ""baixo"") as quartis_streams  
+  
+FROM  
+  `proj002-lab-mariucha-ponte.Projeto02.hipoteses_completona_limpa` AS a  
+LEFT JOIN  
+  q  
+ON  
+  a.streams_limpo=q.streams_limpo  ```
+    
+**quartis da categoria BPM**  
+``` WITH  
+  q AS (  
+  SELECT  
+    track_id,  
+    bpm,  
+    NTILE(4) OVER (ORDER BY bpm) AS quartis_bpm  
+  FROM  
+    `proj002-lab-mariucha-ponte.Projeto02.tabela_completa_com_quartis`   
+    )  
+  
+SELECT  
+  a.*,  
+  q.quartis_bpm,  
+  #abaixo, estou colocando as categorias (nomes) em cada quartil  
+case  
+when q.quartis_bpm = 4 then ""alto""  
+when q.quartis_bpm = 3 then ""medio""  
+when q.quartis_bpm = 2 then ""baixo""  
+when q.quartis_bpm = 1 then ""irrisorio""  
+end
+  
+as quartil_bpm_nome  
+  
+FROM  
+  `proj002-lab-mariucha-ponte.Projeto02.tabela_completa_com_quartis` AS a  
+ JOIN  
+  q  
+using (track_id)
+```
+
 🟣 Calcular correlação entre variáveis ​​	  
-✔			"correlacao positiva entre quantidade de streams e quantidade de playlists onde a musica está
-correlacao quase negativa (muito proxima de 0, indiferente) em caracteristicas da musica x streams
------------------------------------------
+**correlacao positiva entre quantidade de streams e quantidade de playlists onde a musica está**  
+**correlacao quase negativa (muito proxima de 0, indiferente) em caracteristicas da musica x streams**  
+    
+```   
+SELECT  
+  
+ round(   
+      corr (streams_limpo,   in_spotify_playlists)   
+  ,2)  
+  as streamsXplaylists_spotify,  
+  
+round(  
+      corr (streams_limpo,   in_apple_playlists)   
+  ,2)  
+  as streamsXplaylists_apple,  
+  
+round(  
+      corr (streams_limpo,   in_deezer_playlists)   
+  ,2)  
+  as streamsXplaylists_deezer,  
+  
+round(   
+     corr (bpm,  streams_limpo)   
+  ,4)  
+  as bpmXstreams,  
+  
+round(   
+      corr (valence,  streams_limpo)   
+  ,2)  
+  as valenceXstreams,  
+  
+  round(   
+      corr (danceability,  streams_limpo)   
+  ,2)  
+  as danceXstreams,  
+   
+  round(   
+      corr (liveness,  streams_limpo)   
+  ,2)  
+  as liveXstreams,  
+  
+  round(   
+      corr (speechness,  streams_limpo)   
+  ,2)  
+  as speechXstreams,  
+  
+round(   
+      corr (acousticness,  streams_limpo)   
+  ,2)  
+  as acusticoXstreams,  
+  
+  round(   
+      corr (in_spotify_charts, in_deezer_charts)   
+  ,2)  
+  as charts_spotifyXdeezer,  
+  
+  round(   
+      corr (in_spotify_charts, in_shazam_charts)   
+  ,2)  
+  as charts_spotifyXshazam,  
+  
+  round(   
+      corr (in_spotify_charts, in_apple_charts)   
+  ,2)  
+  as charts_spotifyXapple,  
+  
+FROM  
+`proj002-lab-mariucha-ponte.Projeto02.tabela_completa_com_quartis`  ```
+  
+  
+**correlacao hipotese numero de musicas x numero de streams:**
 
-SELECT
-
- round( 
-      corr (streams_limpo,   in_spotify_playlists) 
-  ,2)
-  as streamsXplaylists_spotify,
-
-round(
-      corr (streams_limpo,   in_apple_playlists) 
-  ,2)
-  as streamsXplaylists_apple,
-
-round(
-      corr (streams_limpo,   in_deezer_playlists) 
-  ,2)
-  as streamsXplaylists_deezer,
-
-
-round( 
-      corr (bpm,  streams_limpo) 
-  ,4)
-  as bpmXstreams,
-
-
-round( 
-      corr (valence,  streams_limpo) 
-  ,2)
-  as valenceXstreams,
-
-
-  round( 
-      corr (danceability,  streams_limpo) 
-  ,2)
-  as danceXstreams,
-
- 
-  round( 
-      corr (liveness,  streams_limpo) 
-  ,2)
-  as liveXstreams,
-
-
-  round( 
-      corr (speechness,  streams_limpo) 
-  ,2)
-  as speechXstreams,
-
-  round( 
-      corr (acousticness,  streams_limpo) 
-  ,2)
-  as acusticoXstreams,
-
-  round( 
-      corr (in_spotify_charts, in_deezer_charts) 
-  ,2)
-  as charts_spotifyXdeezer,
-
-  round( 
-      corr (in_spotify_charts, in_shazam_charts) 
-  ,2)
-  as charts_spotifyXshazam,
-
-  round( 
-      corr (in_spotify_charts, in_apple_charts) 
-  ,2)
-  as charts_spotifyXapple,
-
-
-FROM
-  `proj002-lab-mariucha-ponte.Projeto02.tabela_completa_com_quartis`
-
---------------------------------------
-correlacao hipotese numero de musicas x numero de streams:
-
-with base
-as
-(
+  ```with base
+  as
+  (
+    SELECT
+  
+  nome_artista_limpo,
+  artist_count,
+  count(nome_artista_limpo) 
+    as qts_musicas,
+  sum(streams_limpo) 
+    as qts_streams
+  
+    FROM `proj002-lab-mariucha-ponte.Projeto02.tabela_completa_com_quartis` as tabela
+  
+  group by 
+  nome_artista_limpo, 
+  artist_count
+  
+  having artist_count = 1
+  and qts_streams is not null
+  
+  )
+  
+  
   SELECT
-
-nome_artista_limpo,
-artist_count,
-count(nome_artista_limpo) 
-  as qts_musicas,
-sum(streams_limpo) 
-  as qts_streams
-
-  FROM `proj002-lab-mariucha-ponte.Projeto02.tabela_completa_com_quartis` as tabela
-
-group by 
-nome_artista_limpo, 
-artist_count
-
-having artist_count = 1
-and qts_streams is not null
-
-)
-
-
-SELECT
-
- round( 
-      corr (base.qts_musicas, base.qts_streams) 
-       ,2)
-  as correspondencia,
-
-  FROM base"
+  
+   round( 
+        corr (base.qts_musicas, base.qts_streams) 
+         ,2)
+    as correspondencia,
+  
+    FROM base 
+```  
+  
 🔴 Aplicar segmentação	  
 ✔			fiz a segmentacao por quartis dos dtrems e comparei nao apena spor numeros ma stb por graficos barra com os numeros de cada uma das technical informations, e nao identifiquei relcao. concluo que nao tem correlcao
 🔴 Validar hipótese	  
