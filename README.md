@@ -4,7 +4,15 @@ PROJ-002-LAB
 
 2º Projeto da &lt;LAB>
 
-Documentação da execução do Projeto 002 - Spotify
+FERRAMENTAS:
+📈 BigQuery
+📊 PowerBI
+
+#Documentação da execução no 📈 BigQuery
+
+
+#Documentação da execução no 📊 PowerBI
+
 
 
 
