@@ -41,316 +41,300 @@ Spotify: não há nulos
 >  in_shazam_charts IS not NULL"  
   
 🔵 Identificar e tratar valores duplicados	  
-✔			"formula sql usadapara identificar duplicados:
+**Fórmula sql usada para identificar duplicados:**
 
-SELECT
-  track_name,
-  artist_s_name,
-  COUNT(*) as quant
-FROM
-  `proj002-lab-mariucha-ponte.Projeto02.spotify`
-GROUP BY
-  track_name,
-  artist_s_name
-having quant >1
+>SELECT
+>  track_name,
+>  artist_s_name,
+>  COUNT(*) as quant
+>FROM
+>  `proj002-lab-mariucha-ponte.Projeto02.spotify`
+>GROUP BY
+>  track_name,
+>  artist_s_name
+>having quant >1
+  
+  
+**Identificando duplicados na tabela:**  
+spotify: 4 duplicados  
+tec_info: não há duplicados  
+competition: não há duplicados  
 
-spotify: 4 duplicados
-tec_info: não há duplicados
-competition: não há duplicados
-
-para identificar todas as colunas das linhas onde identifiquei duplciados usei  ocodigo sql:
-
-SELECT 
-* 
-FROM `proj002-lab-mariucha-ponte.Projeto02.spotify`
-WHERE 
-track_name = ""SNAP""
-or track_name = ""About Damn Time""
-or track_name = ""Take My Breath""
-or track_name = ""SPIT IN MY FACE!""
-
-apenas na faixa  About damn time, de Lizzo, há mes e dia de lancamento diferente. os demais nao identifiquei porque há duplicados.
-verificar quando der o joind dos tres conjuntos de dados"  
-
+**para identificar todas as colunas das linhas onde há duplicados, o codigo sql foi:**  
+>SELECT 
+>* 
+>FROM `proj002-lab-mariucha-ponte.Projeto02.spotify`
+>WHERE 
+>track_name = ""SNAP""
+>or track_name = ""About Damn Time""
+>or track_name = ""Take My Breath""
+>or track_name = ""SPIT IN MY FACE!""  
+  
+*apenas na faixa  About damn time, de Lizzo, há mes e dia de lançamento diferente. Os demais nao identifiquei motivo de haver duplicados.  
+*verificar quando possível o join dos tres conjuntos de dados  
+  
 🔵 Identificar e gerenciar dados fora do escopo de análise	  
-✔			"codigo sqo para excluir uma coluna:
+**Código sql para excluir uma coluna:**  
+>SELECT  
+>* except(key,mode)  
+> FROM `proj002-lab-mariucha-ponte.Projeto02.tec_info`  
+  
+🔵 Identificar e tratar dados discrepantes em variáveis ​​categóricas  
+**Código sql para substituir cacrateres espciais:**  
+>SELECT  
+>  artist_s_name,  
+>  REGEXP_REPLACE(artist_s_name, r'[^a-zA-Z0-9 ]', ' ')  
+>  as sem_carcar_especial  
+>FROM  
+>  `proj002-lab-mariucha-ponte.Projeto02.spotify`  
+>  
+>#codigo q significa caracteres especiias: r'[^a-zA-Z0-9 ]'  
 
-SELECT 
-* except(key,mode)
- FROM `proj002-lab-mariucha-ponte.Projeto02.tec_info` "
-🔵 Identificar e tratar dados discrepantes em variáveis ​​categóricas
-✔			"codigo sql para substituir cacrateres espciais:
-
-SELECT
-  artist_s_name,
-  REGEXP_REPLACE(artist_s_name, r'[^a-zA-Z0-9 ]', ' ')
-  as sem_carcar_especial
-FROM
-  `proj002-lab-mariucha-ponte.Projeto02.spotify`
-
-#codigo q significa caracteres especiias: r'[^a-zA-Z0-9 ]'"
-🔵 Identificar e tratar dados discrepantes em variáveis ​​numéricas	  
-✔			planiilha spotify tem um dado numerico sicrepante (pois esta como texto, tornando toda a coluna stribng) na linha 47 da coluna streams
-🔵 Verificar e alterar os tipos de dados	  
-✔			"SELECT
- safe_cast (streams as int64) as streams_limpo
-FROM
-  `proj002-lab-mariucha-ponte.Projeto02.spotify`
-
-
-----
-
-mas para tentar gerar o min max e avg junto com o safe cats usei essa 
-
-SELECT 
-
-  MIN(streams_limpo) AS minimo_streams_spotify,
-  MAX(streams_limpo) AS maximo_streams_spotify,
-  round(avg(streams_limpo), 2) as media_streams_spotify
-
-FROM 
-(  
-  SELECT 
-    SAFE_CAST(streams AS int64) as streams_limpo
-       FROM 
-       `proj002-lab-mariucha-ponte.Projeto02.spotify`
-)"  
-
+🔵 Identificar e tratar dados discrepantes em variáveis ​​numéricas  
+*planiilha spotify tem um dado numerico sicrepante (pois esta como texto, tornando toda a coluna stribng) na linha 47 da coluna streams  
+  
+🔵 Verificar e alterar os tipos de dados	    
+>SELECT  
+> safe_cast (streams as int64) as streams_limpo  
+>FROM  
+>  `proj002-lab-mariucha-ponte.Projeto02.spotify`  
+  
+**Porém, para tentar gerar o min, max e avg junto com o safe cast, usei essa:**  
+  
+>SELECT  
+>   
+>  MIN(streams_limpo) AS minimo_streams_spotify,  
+>  MAX(streams_limpo) AS maximo_streams_spotify,  
+>  round(avg(streams_limpo), 2) as media_streams_spotify  
+>  
+>FROM   
+>(    
+>  SELECT   
+>    SAFE_CAST(streams AS int64) as streams_limpo  
+>       FROM   
+>       `proj002-lab-mariucha-ponte.Projeto02.spotify`  
+>)  
+  
 🔵 Unir (join) as tabelas de dados	  
-✔			"juntei 4 views numa query so, e funcionou, cirando inclusive uma nova variavel , de soma de duas outras assim:
-
-SELECT 
-
-
-a.track_id , 
-
-a.track_name ,
-
-a.nome_artista_limpo,
-
-a.artist_count ,
-
-a.DATA_DE_LANCAMENTO ,
-
-a.in_spotify_playlists ,
-
-d.in_apple_playlists ,
-
-d.in_deezer_playlists ,
-
-c.soma_playlists_conc + in_spotify_playlists as soma_playlists , 
-
-b.streams_limpo ,
-
-
-FROM `proj002-lab-mariucha-ponte.Projeto02.spotify_limpo_sem_streams_com_obs_sobre_duplicados`
-
-as a
-
-
-join 
-
-`proj002-lab-mariucha-ponte.Projeto02.spotify_streams_limpo` 
-
-as b 
-
-
-on 
-
-a.track_id = b.track_id 
-
-
-join 
-
-`proj002-lab-mariucha-ponte.Projeto02.playlists_concorrentes_somadas` 
-
-as c 
-
-
-on 
-
-a.track_id = c.track_id 
-
-
-join 
-
-`proj002-lab-mariucha-ponte.Projeto02.competition` 
-
-as d 
-
-
-on 
-
-a.track_id = d.track_id
+**Juntei 4 views numa query só, e funcionou, cirando inclusive uma nova variavel, de soma de duas outras assim:**  
+   
+>SELECT   
+>    
+>a.track_id ,   
+>  
+>a.track_name ,  
+>  
+>a.nome_artista_limpo,  
+>  
+>a.artist_count ,  
+>  
+>a.DATA_DE_LANCAMENTO ,  
+>  
+>a.in_spotify_playlists ,  
+>  
+>d.in_apple_playlists ,  
+>  
+>d.in_deezer_playlists ,  
+>  
+>c.soma_playlists_conc + in_spotify_playlists as soma_playlists ,   
+>  
+>b.streams_limpo ,  
+>  
+>FROM `proj002-lab-mariucha-ponte.Projeto02.spotify_limpo_sem_streams_com_obs_sobre_duplicados`  
+> 
+>as a  
+>  
+>join  
+>  
+>`proj002-lab-mariucha-ponte.Projeto02.spotify_streams_limpo`  
+>  
+>as b  
+> 
+>on  
+>a.track_id = b.track_id  
+>  
+>join  
+>  
+>`proj002-lab-mariucha-ponte.Projeto02.playlists_concorrentes_somadas`   
+>  
+>as c   
+>  
+>on   
+>  
+>a.track_id = c.track_id   
+>  
+>join   
+>  
+>`proj002-lab-mariucha-ponte.Projeto02.competition`   
+>  
+>as d   
+>  
+>on   
+>  
+>a.track_id = d.track_id  
 
 #adicionar as caracteristicas das musicas, dnceability, bpm, etc 
 
 "
-🔵 Criar novas variáveis ​​  
-✔			"exemplo1:
-
-SELECT  
-  track_id,
-  in_apple_playlists + in_deezer_playlists as playlists_concorrentes
-FROM `proj002-lab-mariucha-ponte.Projeto02.copetition` 
-
----------------------------
-exemplo2:
-
-SELECT
-  DATE(CONCAT(released_year, ""-"", released_month, ""-"", released_day)) AS DATA_DE_LANCAMENTO,
-  SUM(in_spotify_charts) AS SOMA_CHARTS_SPOTFY,
-  SUM(in_spotify_playlists) AS SOMA_PLAYLISTS_SPOTFY
-
-  FROM
-    `proj002-lab-mariucha-ponte.Projeto02.spotify` 
-    GROUP BY DATA_DE_LANCAMENTO"  
-    
-🔵 Construir tabelas de dados auxiliares	  
-✔			"with teste 
-  as 
-  (
-  select 
-  nome_artista_limpo,
-  count(*) as nro_de_songs_do_artist
-
-  from `proj002-lab-mariucha-ponte.Projeto02.spotify_limpo_sem_streams_com_obs_sobre_duplicados` 
-
-  group by nome_artista_limpo
-  )
-#tabela temporaria
-
-SELECT  
-* except 
-(
-nome_alterado
-)
-FROM `proj002-lab-mariucha-ponte.Projeto02.spotify_limpo_sem_streams_com_obs_sobre_duplicados` as o
+🔵 Criar novas variáveis ​​    
+**exemplo1:**
   
-
-right join  teste
-using (nome_artista_limpo)
-#`USING` ao invés de `ON x=y`
-"
-🟣 Agrupar dados de acordo com variáveis ​​categóricas	  
-✔			muito tranquilo, parece mesmo com tabelas dinamicas. é o icone de matriz, parece uma tabelinha, mas algumas celulas direitas e inferiores sao azuis
-🟣 Visualizar variáveis ​​categóricas	  
-✔			criei graficos de varios tipos para variaveis diferentes. achei bem tranquilo e quase intuitivo
-🟣 Aplicar medidas de tendência central	  
-✔			media e mediana, comparadas com desvio padrão. fiz com alguns dados e compreendi. o desvio padrão mais proxim oda media significa que há pouco desvio padrão, iu seja, que nao ha dados (muitos) dados distanmtes da média. se a diferenca entre desvi oapdroa e media for grande, significa que ha dados (muitos) longe da media. a mediana é o numero do meio (ou a media entre os dois numeros do meio, se a quantisdade de numeros for par. Se a media a e amédia foram muito diferentes isso significa que há uma diferenca grande entre os nuemros antes e depois da média, possivelemnte uma grande diferenca entre media e mediana ocorrerá tb an diferenca entre media e desvi opadrão?
-🟣 Visualizar a distribuição dos dados	  
-✔			"com dificuldades com meu computador pessoal, to usando um emprestado , entao nao quis inatalar o python e vou fazer no spreadsheets
-
-usei indice corresp para juntar as planilhas da lab que tem as playlists dos cocnorrentes e do spotify, pelo trackID
-
-fiz um histograma sobre a quantidade vezes que um artista aparece no spotify playlist e vi que a maioria so tem 1"
-🟣 Aplicar medidas de dispersão	  
-✔			"media e mediana, comparadas com desvio padrão. fiz com alguns dados e compreendi. o desvio padrão mais proxim oda media significa que há pouco desvio padrão, iu seja, que nao ha dados (muitos) dados distanmtes da média. se a diferenca entre desvi oapdroa e media for grande, significa que ha dados (muitos) longe da media. a mediana é o numero do meio (ou a media entre os dois numeros do meio, se a quantisdade de numeros for par. Se a media a e amédia foram muito diferentes isso significa que há uma diferenca grande entre os nuemros antes e depois da média, possivelemnte uma grande diferenca entre media e mediana ocorrerá tb an diferenca entre media e desvi opadrão?
-
-desvio padrao baixo significa q há pouca distancia dos dados gerais pra media e mediana. (histograma sino)
-desvio padrao alto significa que os daods em geral estao masi distantes da media (hitograma vale)"
-🟣 Visualizar o comportamento dos dados ao longo do tempo	  
-✔			fiz grafico de linha ao longo do tempo, vi como inserir filtro de "segmentacao de dados" (um tipo de grafico) flutuante na tela no dashboard
-🟣 Calcular quartis, decis ou percentis	  
-✔			"with q
-as
-(select 
-streams_limpo,
-ntile(4) over (order by streams_limpo) as quartis_streams
-from `proj002-lab-mariucha-ponte.Projeto02.hipoteses_completona_limpa` 
-)
-
-SELECT 
-a.*,
-q.quartis_streams
- FROM `proj002-lab-mariucha-ponte.Projeto02.hipoteses_completona_limpa` as a
- 
- left join q
-
- on a.streams_limpo=q.streams_limpo
-
------------------------------------------
-
-#categorizado em alto e baixo
-WITH
-  q AS (
-  SELECT
-    streams_limpo,
-    NTILE(4) OVER (ORDER BY streams_limpo) AS quartis_streams
-  FROM
-    `proj002-lab-mariucha-ponte.Projeto02.hipoteses_completona_limpa` )
-
-
-SELECT
-  a.*,
-  q.quartis_streams,
-IF
-  (q.quartis_streams = 4, ""alto"", ""baixo"") as quartis_streams
-
-
-FROM
-  `proj002-lab-mariucha-ponte.Projeto02.hipoteses_completona_limpa` AS a
-LEFT JOIN
-  q
-ON
-  a.streams_limpo=q.streams_limpo
-
-WITH
-  q AS (
-  SELECT
-    streams_limpo,
-    NTILE(4) OVER (ORDER BY streams_limpo) AS quartis_streams
-  FROM
-    `proj002-lab-mariucha-ponte.Projeto02.hipoteses_completona_limpa` )
-
-
-SELECT
-  a.*,
-  q.quartis_streams,
-IF
-  (q.quartis_streams = 4, ""alto"", ""baixo"") as quartis_streams
-
-
-FROM
-  `proj002-lab-mariucha-ponte.Projeto02.hipoteses_completona_limpa` AS a
-LEFT JOIN
-  q
-ON
-  a.streams_limpo=q.streams_limpo
-
--------------------------------
-
-quartis da categoria BPM
-
-WITH
-  q AS (
-  SELECT
-    track_id,
-    bpm,
-    NTILE(4) OVER (ORDER BY bpm) AS quartis_bpm
-  FROM
-    `proj002-lab-mariucha-ponte.Projeto02.tabela_completa_com_quartis` 
-    )
-
-
-SELECT
-  a.*,
-  q.quartis_bpm,
-  #abaixo, estou colocando as categorias (nomes) em cada quartil
-case
-when q.quartis_bpm = 4 then ""alto""
-when q.quartis_bpm = 3 then ""medio""
-when q.quartis_bpm = 2 then ""baixo""
-when q.quartis_bpm = 1 then ""irrisorio""
-end
-as quartil_bpm_nome
-
-FROM
-  `proj002-lab-mariucha-ponte.Projeto02.tabela_completa_com_quartis` AS a
- JOIN
-  q
-using (track_id)
-"
+>SELECT   
+>  track_id,  
+>  in_apple_playlists + in_deezer_playlists as playlists_concorrentes  
+>FROM `proj002-lab-mariucha-ponte.Projeto02.copetition`   
+  
+**exemplo2:**  
+>SELECT  
+>  DATE(CONCAT(released_year, ""-"", released_month, ""-"", released_day)) AS DATA_DE_LANCAMENTO,  
+>  SUM(in_spotify_charts) AS SOMA_CHARTS_SPOTFY,  
+>  SUM(in_spotify_playlists) AS SOMA_PLAYLISTS_SPOTFY  
+>  
+>  FROM  
+>    `proj002-lab-mariucha-ponte.Projeto02.spotify` 
+>    GROUP BY DATA_DE_LANCAMENTO"  
+      
+🔵 Construir tabelas de dados auxiliares	  
+>with teste   
+>  as  
+>  (  
+>  select   
+>  nome_artista_limpo,  
+>  count(*) as nro_de_songs_do_artist  
+>  
+>  from `proj002-lab-mariucha-ponte.Projeto02.spotify_limpo_sem_streams_com_obs_sobre_duplicados`   
+>  
+>  group by nome_artista_limpo  
+>  )  
+>#tabela temporaria  
+>  
+>SELECT    
+>* except   
+> (  
+>nome_alterado  
+> )  
+>FROM `proj002-lab-mariucha-ponte.Projeto02.spotify_limpo_sem_streams_com_obs_sobre_duplicados` as o  
+>  
+>right join  teste  
+>using (nome_artista_limpo)  
+>#`USING` ao invés de `ON x=y`  
+  
+🟣 Agrupar dados de acordo com variáveis ​​categóricas	   
+Muito tranquilo, parece mesmo com tabelas dinamicas. é o icone de matriz, parece uma tabelinha, mas algumas celulas direitas e inferiores sao azuis  
+  
+🟣 Visualizar variáveis ​​categóricas	    
+Criei graficos de varios tipos para variaveis diferentes. achei bem tranquilo e quase intuitivo  
+  
+🟣 Aplicar medidas de tendência central	   
+Media e mediana, comparadas com desvio padrão. fiz com alguns dados e compreendi. o desvio padrão mais proxim oda media significa que há pouco desvio padrão, iu seja, que nao ha dados (muitos) dados distanmtes da média. se a diferenca entre desvi oapdroa e media for grande, significa que ha dados (muitos) longe da media. a mediana é o numero do meio (ou a media entre os dois numeros do meio, se a quantisdade de numeros for par. Se a media a e amédia foram muito diferentes isso significa que há uma diferenca grande entre os nuemros antes e depois da média, possivelemnte uma grande diferenca entre media e mediana ocorrerá tb an diferenca entre media e desvi opadrão?  
+  
+🟣 Visualizar a distribuição dos dados	   
+Com dificuldades com meu computador pessoal, to usando um emprestado , entao nao quis inatalar o python e vou fazer no spreadsheets  
+  
+usei indice corresp para juntar as planilhas da lab que tem as playlists dos cocnorrentes e do spotify, pelo trackID  
+  
+fiz um histograma sobre a quantidade vezes que um artista aparece no spotify playlist e vi que a maioria so tem 1"  
+  
+🟣 Aplicar medidas de dispersão	    
+Media e mediana, comparadas com desvio padrão. fiz com alguns dados e compreendi. o desvio padrão mais proxim oda media significa que há pouco desvio padrão, iu seja, que nao ha dados (muitos) dados distanmtes da média. se a diferenca entre desvi oapdroa e media for grande, significa que ha dados (muitos) longe da media. a mediana é o numero do meio (ou a media entre os dois numeros do meio, se a quantisdade de numeros for par. Se a media a e amédia foram muito diferentes isso significa que há uma diferenca grande entre os nuemros antes e depois da média, possivelemnte uma grande diferenca entre media e mediana ocorrerá tb an diferenca entre media e desvio padrão?  
+  
+desvio padrao baixo significa q há pouca distancia dos dados gerais pra media e mediana. (histograma sino)  
+desvio padrao alto significa que os daods em geral estao masi distantes da media (hitograma vale)  
+  
+🟣 Visualizar o comportamento dos dados ao longo do tempo	    
+Fiz grafico de linha ao longo do tempo, vi como inserir filtro de "segmentacao de dados" (um tipo de grafico) flutuante na tela no dashboard  
+  
+🟣 Calcular quartis, decis ou percentis	    
+>with q  
+>as  
+>(select   
+>streams_limpo,  
+>ntile(4) over (order by streams_limpo) as quartis_streams  
+>from `proj002-lab-mariucha-ponte.Projeto02.hipoteses_completona_limpa`   
+>)  
+>  
+>SELECT   
+>a.*,  
+>q.quartis_streams  
+> FROM `proj002-lab-mariucha-ponte.Projeto02.hipoteses_completona_limpa` as a  
+>   
+> left join q  
+>  
+> on a.streams_limpo=q.streams_limpo  
+>  
+>#categorizado em alto e baixo  
+>WITH  
+>  q AS (  
+>  SELECT  
+>    streams_limpo,  
+>    NTILE(4) OVER (ORDER BY streams_limpo) AS quartis_streams  
+>  FROM  
+>    `proj002-lab-mariucha-ponte.Projeto02.hipoteses_completona_limpa` )  
+>  
+>SELECT  
+>  a.*,  
+>  q.quartis_streams,  
+>IF  
+>  (q.quartis_streams = 4, ""alto"", ""baixo"") as quartis_streams  
+>  
+>FROM  
+>  `proj002-lab-mariucha-ponte.Projeto02.hipoteses_completona_limpa` AS a  
+>LEFT JOIN  
+>  q  
+>ON  
+>  a.streams_limpo=q.streams_limpo  
+>  
+>WITH  
+>  q AS (  
+>  SELECT  
+>    streams_limpo,  
+>    NTILE(4) OVER (ORDER BY streams_limpo) AS quartis_streams  
+>  FROM  
+>    `proj002-lab-mariucha-ponte.Projeto02.hipoteses_completona_limpa` )  
+>  
+>SELECT  
+>  a.*,  
+>  q.quartis_streams,  
+>IF  
+>  (q.quartis_streams = 4, ""alto"", ""baixo"") as quartis_streams  
+>  
+>FROM  
+>  `proj002-lab-mariucha-ponte.Projeto02.hipoteses_completona_limpa` AS a  
+>LEFT JOIN  
+>  q  
+>ON  
+>  a.streams_limpo=q.streams_limpo  
+>    
+**quartis da categoria BPM**  
+>WITH  
+>  q AS (  
+>  SELECT  
+>    track_id,  
+>    bpm,  
+>    NTILE(4) OVER (ORDER BY bpm) AS quartis_bpm  
+>  FROM  
+>    `proj002-lab-mariucha-ponte.Projeto02.tabela_completa_com_quartis`   
+>    )  
+>  
+>SELECT  
+>  a.*,  
+>  q.quartis_bpm,  
+>  #abaixo, estou colocando as categorias (nomes) em cada quartil  
+>case  
+>when q.quartis_bpm = 4 then ""alto""  
+>when q.quartis_bpm = 3 then ""medio""  
+>when q.quartis_bpm = 2 then ""baixo""  
+>when q.quartis_bpm = 1 then ""irrisorio""  
+>end
+>  
+>as quartil_bpm_nome  
+>  
+>FROM  
+>  `proj002-lab-mariucha-ponte.Projeto02.tabela_completa_com_quartis` AS a  
+> JOIN  
+>  q  
+>using (track_id)  
+  
 🟣 Calcular correlação entre variáveis ​​	  
 ✔			"correlacao positiva entre quantidade de streams e quantidade de playlists onde a musica está
 correlacao quase negativa (muito proxima de 0, indiferente) em caracteristicas da musica x streams
