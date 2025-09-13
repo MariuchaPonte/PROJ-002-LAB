@@ -531,23 +531,22 @@ Valores → a medida Qtd_Playlists_Selecionada.
  ```
   
 🟢 Selecionar gráficos e informações relevantes	  			  
-"me reuni com minha dupla e discutimos quais graficos serviriam para cada caso e como fariamos funcionar. fiz u mrascunho no papel tambe, separando por cada hipotese,sendo que a hipotese 1 e a 5 foram juntas  
+me reuni com minha dupla e discutimos quais graficos serviriam para cada caso e como fariamos funcionar. fiz u mrascunho no papel tambe, separando por cada hipotese,sendo que a hipotese 1 e a 5 foram juntas  
   
-contei com ajuda do coach vitor para inseriri um filtro visual que nao estava conseguindo. o principal problema é que eu estava puxando dados de tabelas diferenes e para o que eu queria, pra hipotese x, nao estava funcionado fáci lomo foi pra hipotese y.  os codigos usados para solucionar  foram:"  
+contei com ajuda do coach vitor para inseriri um filtro visual que nao estava conseguindo. o principal problema é que eu estava puxando dados de tabelas diferenes e para o que eu queria, pra hipotese x, nao estava funcionado fáci lomo foi pra hipotese y.  os codigos usados para solucionar  foram:    
   
 🟢 Selecionar gráficos e informações relevantes		  
-		marco2. voltarei a ele ao fim do periodo de entrega do proj 3  
+marco2. voltarei a ele ao fim do periodo de entrega do proj 3  
   
 🟢 Criar uma apresentação     
-			foi tranquilo. com a dupla definimos que a apresentaao seria simples, hipotese a hipotese, que eu faria o visual, ate pq meus graficos estavam organizados em dashboards ja, e por conta d eminha formacao em desing gráfico. peguei um modelo do canva apresentacoes para otimizar o tempo , fiz download como pptx e importei pro google apesentacoes. nele ajustei e inseri prints dos graficos do owerBI. Nao dediqui tempo a puxar os gráficos vinculados, então trabalhei ocm print mesmo, ate para dar tempo de fazer o projeto3 a tempo antes do fim do bootcamp.  
+foi tranquilo. com a dupla definimos que a apresentaao seria simples, hipotese a hipotese, que eu faria o visual, ate pq meus graficos estavam organizados em dashboards ja, e por conta d eminha formacao em desing gráfico. peguei um modelo do canva apresentacoes para otimizar o tempo , fiz download como pptx e importei pro google apesentacoes. nele ajustei e inseri prints dos graficos do owerBI. Nao dediqui tempo a puxar os gráficos vinculados, então trabalhei ocm print mesmo, ate para dar tempo de fazer o projeto3 a tempo antes do fim do bootcamp.  
   
 🟢 Criar uma apresentação		  
-		marco2. voltarei a ele ao fim do periodo de entrega do proj 3  
+marco2. voltarei a ele ao fim do periodo de entrega do proj 3  
   
 🟢 Apresentar resultados com conclusões e recomendações	  
-
-			onversei com a dupla, confirmamos que vamos usar a apsentacao com oficou depois de ajutarmos algumas coisas que discutimos. proximo passo: gravar o video e entegar as documentacoes.  
-  
+conversei com a dupla, confirmamos que vamos usar a apsentacao com oficou depois de ajutarmos algumas coisas que discutimos. proximo passo: gravar o video e entegar as documentacoes.  
+   
 🟢 Apresentar resultados com conclusões e recomendações		 
-		marco2. voltarei a ele ao fim do periodo de entrega do proj 3
+marco2. voltarei a ele ao fim do periodo de entrega do proj 3  
 
