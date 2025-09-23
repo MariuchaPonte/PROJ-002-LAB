@@ -92,7 +92,7 @@ FROM
 #codigo q significa caracteres especiias: r'[^a-zA-Z0-9 ]'  
  ```  
 🔵 Identificar e tratar dados discrepantes em variáveis ​​numéricas  
-*planiilha spotify tem um dado numerico sicrepante (pois esta como texto, tornando toda a coluna stribng) na linha 47 da coluna streams  
+*planiilha spotify tem um dado numerico discrepante (pois está como texto, tornando toda a coluna stribng) na linha 47 da coluna streams  
   
 🔵 Verificar e alterar os tipos de dados	    
 ``` SELECT  
